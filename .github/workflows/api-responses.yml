@@ -1,0 +1,42 @@
+name: Save API Responses
+
+on:
+  push:
+    branches:
+      - main  # Replace with your repository's default branch
+
+jobs:
+  save-api-responses:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: 14
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Run script to save API response
+      run: npm run save-api-response
+
+    - name: Commit and push changes
+      run: |
+        git config --global user.email "swarnalathagandikota000@gmail.com"
+        git config --global user.name "swa18141"
+        git add .
+        git commit -m "Add API responses"
+        git push
+
+    - name: Run PowerShell script
+      shell: pwsh
+      run: |
+        # Define the path to the PowerShell script that performs additional tasks (e.g., verification, tests)
+        scriptPath="./.github/workflows/api.ps1"
+
+        # Execute the PowerShell script
+        Invoke-Pester -Path $scriptPath
